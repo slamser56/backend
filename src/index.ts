@@ -1,14 +1,12 @@
 import Express = require('express');
 const app = Express();
-const config = require('./config');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser')
+import config = require('./config');
+import database = require('./database');
+import bodyParser = require('body-parser')
+
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-
-mongoose.connect(config.Mongoose, {useNewUrlParser: true, useUnifiedTopology: true});
-
 
 
 app.get('/', (req, res) => {
@@ -16,13 +14,17 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api', (req, res) => {
-        res.json({status: mongoose.connection.readyState});
+        res.json({status: true});
   });
 
-
-
 app.listen(config.PORT, () => {
-    console.log(`Backend listening on ${config.PORT} port!`);
+    database().then( (res) =>{
+        if(res){
+        console.log(`Backend listening on ${config.PORT} port!`);
+    }
+    }).catch((err) =>{
+        console.log(err)
+    })
 });
 
 
