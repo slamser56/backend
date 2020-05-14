@@ -27,6 +27,9 @@ function between(min: any, max: any) {
 class phoneController {
   async sendCode(req: any, res: any) {
     const { phoneNumber } = req.body;
+    if(isNaN(Number(phoneNumber))){
+      return res.json({status: false, message: 'Input phone number'})
+    }
     const code = between(1000, 9999);
     try {
       //client.sms.message(messageCallback, phoneNumber, "Code: " + code, "ARN");
@@ -36,13 +39,13 @@ class phoneController {
         { upsert: true }
       );
       if (!update) {
-        res.json({ status: false });
+        return res.json({ status: false });
       } else {
-        res.json({ status: true });
+        return res.json({ status: true });
       }
     } catch (err) {
-      res.json({ status: false });
       console.log(err);
+      return res.json({ status: false });
     }
   }
 
@@ -54,7 +57,7 @@ class phoneController {
         code,
       });
       if (!find) {
-        res.json({ status: false });
+        return res.json({ status: false });
       } else {
         let update = await model.phone.update(
           { phoneNumber },
@@ -62,15 +65,15 @@ class phoneController {
           { upsert: true }
         );
         if (!update) {
-          res.json({ status: false });
+          return res.json({ status: false });
         } else {
           await model.phoneVerification.deleteOne({ phoneNumber, code });
-          res.json({ status: true });
+          return res.json({ status: true });
         }
       }
     } catch (err) {
-      res.json({ status: false });
       console.log(err);
+      return res.json({ status: false });
     }
   }
 }
