@@ -1,10 +1,11 @@
 import model from "../model";
 import config from "../config";
 const TeleSignSDK = require("telesignsdk");
+const jwt = require('jsonwebtoken');
 
 const customerId = config.customerId;
 const apiKey = config.apiKey;
-const rest_endpoint = "https://rest-api.telesign.com";
+const rest_endpoint = config.rest_endpont;
 const timeout = 10 * 1000;
 
 const client = new TeleSignSDK(customerId, apiKey, rest_endpoint, timeout);
@@ -28,24 +29,24 @@ class phoneController {
   async sendCode(req: any, res: any) {
     const { phoneNumber } = req.body;
     if(isNaN(Number(phoneNumber))){
-      return res.json({status: false, message: 'Input phone number'})
+      return res.status(404).send();
     }
     const code = between(1000, 9999);
     try {
       //client.sms.message(messageCallback, phoneNumber, "Code: " + code, "ARN");
-      let update = await model.phoneVerification.update(
+      let update = await model.phoneVerification.updateOne(
         { phoneNumber },
         { phoneNumber, code },
         { upsert: true }
       );
       if (!update) {
-        return res.json({ status: false });
+        return res.status(500).send();
       } else {
-        return res.json({ status: true });
+        return res.status(200).send();
       }
     } catch (err) {
       console.log(err);
-      return res.json({ status: false });
+      return res.status(500).send();
     }
   }
 
@@ -57,23 +58,35 @@ class phoneController {
         code,
       });
       if (!find) {
-        return res.json({ status: false });
+        return res.status(404).send();
       } else {
-        let update = await model.phone.update(
+        const token = jwt.sign({ exp: config.EXP_DATE,
+          phoneNumber},config.SECRET);
+        let update = await model.phone.updateOne(
           { phoneNumber },
           { phoneNumber },
           { upsert: true }
         );
         if (!update) {
-          return res.json({ status: false });
+          return res.status(500).send();
         } else {
           await model.phoneVerification.deleteOne({ phoneNumber, code });
-          return res.json({ status: true });
+          return res.status(200).json({token});
         }
       }
     } catch (err) {
       console.log(err);
-      return res.json({ status: false });
+      return res.status(500).send();
+    }
+  }
+  async verifyToken(req: any, res: any) {
+    const { token } = req.body;
+    try {
+      await jwt.verify(token, config.SECRET)
+      return res.status(200).send()
+    } catch (err) {
+      console.log(err);
+      return res.status(401).send();
     }
   }
 }
