@@ -1,19 +1,19 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
-const phone = new Schema({
+const image = new Schema({
   phoneNumber: {
     type: Number,
     required: true,
-    unique: true,
   },
-  avatar: {
+  image: {
     type: String,
+    required: true,
   }
 });
 
-phone.set('toJSON', {
+image.set('toJSON', {
   virtuals: true,
 });
 
-export default mongoose.model('phone', phone);
+export default mongoose.model('image', image);

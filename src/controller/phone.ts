@@ -1,15 +1,17 @@
 import model from "../model";
-import config from "../config";
 const TeleSignSDK = require("telesignsdk");
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const customerId = config.customerId;
-const apiKey = config.apiKey;
-const rest_endpoint = config.rest_endpont;
+const customerId = process.env.customerId;
+const apiKey = process.env.apiKey;
+const rest_endpoint = process.env.rest_endpont;
 const timeout = 10 * 1000;
+const exp_Date = Math.floor(Date.now() / 1000) + (60 * 60 * 24);
 
 const client = new TeleSignSDK(customerId, apiKey, rest_endpoint, timeout);
-function messageCallback(error: any, responseBody: any) {
+function messageCallback(error, responseBody) {
   if (error === null) {
     console.log(
       `Messaging response for messaging phone number:` +
@@ -21,16 +23,13 @@ function messageCallback(error: any, responseBody: any) {
   }
 }
 
-function between(min: any, max: any) {
+function between(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
 class phoneController {
-  async sendCode(req: any, res: any) {
+  async sendCode(req, res) {
     const { phoneNumber } = req.body;
-    if(isNaN(Number(phoneNumber))){
-      return res.status(404).send();
-    }
     const code = between(1000, 9999);
     try {
       //client.sms.message(messageCallback, phoneNumber, "Code: " + code, "ARN");
@@ -45,12 +44,11 @@ class phoneController {
         return res.status(200).send();
       }
     } catch (err) {
-      console.log(err);
       return res.status(500).send();
     }
   }
 
-  async codeVerify(req: any, res: any) {
+  async codeVerify(req, res) {
     const { phoneNumber, code } = req.body;
     try {
       let find = await model.phoneVerification.findOne({
@@ -60,8 +58,8 @@ class phoneController {
       if (!find) {
         return res.status(404).send();
       } else {
-        const token = jwt.sign({ exp: config.EXP_DATE,
-          phoneNumber},config.SECRET);
+        const token = jwt.sign({ exp: exp_Date,
+          phoneNumber},process.env.SECRET);
         let update = await model.phone.updateOne(
           { phoneNumber },
           { phoneNumber },
@@ -75,17 +73,15 @@ class phoneController {
         }
       }
     } catch (err) {
-      console.log(err);
       return res.status(500).send();
     }
   }
-  async verifyToken(req: any, res: any) {
+  async verifyToken(req, res) {
     const { token } = req.body;
     try {
-      await jwt.verify(token, config.SECRET)
+      await jwt.verify(token, process.env.SECRET)
       return res.status(200).send()
     } catch (err) {
-      console.log(err);
       return res.status(401).send();
     }
   }

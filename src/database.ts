@@ -1,19 +1,24 @@
-import config = require('./config');
-import mongoose = require('mongoose');
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+dotenv.config();
 
-export = () => {
-  return new Promise((resolve, reject) => {
-    mongoose.Promise = global.Promise;
+export const database = async () => {
+  try {
     mongoose.set('debug', true);
-
-    mongoose.connection
-      .on('error', (error) => reject(error))
-      .on('close', () => console.log('Database connection closed.'))
-      .once('open', () => resolve(mongoose.connections[0]));
-
-    mongoose.connect(config.MONGO_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-  });
+    await mongoose.connect(
+      String(process.env.MONGO_URL),
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      },
+      function (err) {
+        if (err) {
+          Promise.reject()
+        }
+      },
+    );
+    Promise.resolve();
+  } catch (error) {
+    Promise.reject(error);
+  }
 };

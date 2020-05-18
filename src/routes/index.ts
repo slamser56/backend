@@ -1,3 +1,4 @@
 import phone from './phone';
+import profile from './profile';
 
-export default { phone };
+export default { phone,profile };
