@@ -1,6 +1,6 @@
 import model from '../model';
 import dotenv from 'dotenv';
-import jwt from 'jsonwebtoken';
+
 dotenv.config();
 const cloudinary = require('cloudinary').v2;
 
@@ -12,13 +12,12 @@ cloudinary.config({
 
 class profileController {
   async uploadAvatar(req, res) {
-    const { image, token } = req.body;
+    const { image, _id } = req.body;
     try {
-      const {phoneNumber} = await jwt.verify(token, process.env.SECRET)
       const result = await cloudinary.uploader.upload(
         'data:image/jpeg;base64,' + image,
       );
-      await model.phone.updateOne({ phoneNumber }, { avatar: result.url });
+      await model.phone.updateOne({ _id }, { avatar: result.url });
       return res.status(200).json({ avatar: result.url });
     } catch (err) {
       return res.status(500).send();
@@ -26,11 +25,10 @@ class profileController {
   }
 
   async getAvatar(req, res) {
-    const { token } = req.body;
+    const { _id } = req.body;
     try {
-      const {phoneNumber} = await jwt.verify(token, process.env.SECRET)
       const { avatar } = await model.phone.findOne({
-        phoneNumber,
+        _id,
       });
       if (avatar) {
         return res.status(200).json({ avatar });

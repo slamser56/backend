@@ -17,6 +17,7 @@ app.use(
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: false }));
 app.use(bodyParser.json({ limit: '10mb' }));
 
+app.use('/api/post', router.post);
 app.use('/api/phone', router.phone);
 app.use('/api/profile', router.profile);
 

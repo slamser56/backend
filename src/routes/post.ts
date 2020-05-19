@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
 const router = express.Router();
-const profileController = new controller.profile();
+const postController = new controller.post();
 
 const verifyToken = async function (req, res, next) {
   try {
@@ -16,7 +16,6 @@ const verifyToken = async function (req, res, next) {
   next();
 };
 
-router.post('/uploadAvatar', verifyToken, profileController.uploadAvatar);
-router.post('/getAvatar', verifyToken, profileController.getAvatar);
+router.post('/uploadPost', verifyToken, postController.uploadPost);
 
 export default router;
