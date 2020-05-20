@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-const Schema = mongoose.Schema;
+
+const { Schema } = mongoose;
 
 const image = new Schema({
   phoneNumber: {
@@ -9,7 +10,7 @@ const image = new Schema({
   image: {
     type: String,
     required: true,
-  }
+  },
 });
 
 image.set('toJSON', {

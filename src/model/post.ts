@@ -1,10 +1,17 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
-const Schema = mongoose.Schema;
+export interface PostInterface extends mongoose.Document{
+  _id: Schema.Types.ObjectId;
+  idUser: string;
+  text: string;
+  date: Date;
+  images: Array<string>;
+}
 
 const post = new Schema({
   idUser: {
-    type: Number,
+    type: Schema.Types.ObjectId,
+    ref: 'user',
     required: true,
   },
   text: {
@@ -24,4 +31,4 @@ post.set('toJSON', {
   virtuals: true,
 });
 
-export default mongoose.model('post', post);
+export default mongoose.model<PostInterface>('post', post);

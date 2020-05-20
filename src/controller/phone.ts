@@ -1,55 +1,49 @@
-import model from '../model';
-const TeleSignSDK = require('telesignsdk');
+import express from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import model from '../model';
+import getCode from '../utils/codeGenerator';
+import * as logger from '../utils/logger';
+
+const TeleSignSDK = require('telesignsdk');
+
 dotenv.config();
 
-const customerId = process.env.customerId;
-const apiKey = process.env.apiKey;
-const rest_endpoint = process.env.rest_endpont;
-const timeout = 10 * 1000;
-const exp_Date = Math.floor(Date.now() / 1000) + 60 * 60 * 24;
+const expDate = Math.floor(Date.now() / 1000) + 60 * 60 * 24;
 
-const client = new TeleSignSDK(customerId, apiKey, rest_endpoint, timeout);
-function messageCallback(error, responseBody) {
-  if (error === null) {
-    console.log(
-      `Messaging response for messaging phone number:` +
-        ` => code: ${responseBody['status']['code']}` +
-        `, description: ${responseBody['status']['description']}`,
-    );
+const client = new TeleSignSDK(
+  process.env.customerId,
+  process.env.apiKey,
+  process.env.rest_endpont,
+  process.env.TeleSignTimeout,
+);
+function messageCallback(err: string, reply: string): void {
+  if (err) {
+    logger.info("Error: Could not reach TeleSign's servers");
   } else {
-    throw 'Unable to send message. ' + error;
+    logger.info('YAY!, the SMS message is being sent now by TeleSign!');
   }
 }
 
-function between(min, max) {
-  return Math.floor(Math.random() * (max - min) + min);
-}
-
-class phoneController {
-  async sendCode(req, res) {
-    const { phoneNumber } = req.body;
-    const code = between(1000, 9999);
+class PhoneController {
+  sendCode = async ({ body: { phoneNumber } }: express.Request, res: express.Response): Promise<express.Response> => {
+    const code = getCode();
     try {
-      //client.sms.message(messageCallback, phoneNumber, "Code: " + code, "ARN");
-      let update = await model.phoneVerification.updateOne(
-        { phoneNumber },
-        { phoneNumber, code },
-        { upsert: true },
-      );
+      client.sms.message(messageCallback, phoneNumber, `Code: ${code}`, 'ARN');
+      const update = await model.phoneVerification.updateOne({ phoneNumber }, { phoneNumber, code }, { upsert: true });
       if (!update) {
         return res.status(500).send();
-      } else {
-        return res.status(200).send();
       }
+      return res.status(200).send();
     } catch (err) {
       return res.status(500).send();
     }
-  }
+  };
 
-  async codeVerify(req, res) {
-    const { phoneNumber, code } = req.body;
+  codeVerify = async (
+    { body: { phoneNumber, code } }: express.Request,
+    res: express.Response,
+  ): Promise<express.Response> => {
     try {
       const find = await model.phoneVerification.findOne({
         phoneNumber,
@@ -57,37 +51,28 @@ class phoneController {
       });
       if (!find) {
         return res.status(404).send();
-      } else {
-        await model.phone.updateOne(
-          { phoneNumber },
-          { phoneNumber },
-          { upsert: true },
-        );
-        const { _id } = await model.phone.findOne({ phoneNumber });
-        if (!_id) {
-          return res.status(500).send();
-        } else {
-          const token = jwt.sign(
-            { exp: exp_Date, phoneNumber, _id },
-            process.env.SECRET,
-          );
-          await model.phoneVerification.deleteOne({ phoneNumber, code });
-          return res.status(200).json({ token });
-        }
       }
+      await model.phoneVerification.deleteOne({ phoneNumber, code });
+      await model.user.updateOne({ phoneNumber }, { phoneNumber }, { upsert: true });
+      const { _id } = await model.user.findOne({ phoneNumber });
+      if (!_id) {
+        return res.status(500).send();
+      }
+      const token = jwt.sign({ exp: expDate, phoneNumber, _id }, process.env.SECRET);
+      return res.status(200).json({ token });
     } catch (err) {
       return res.status(500).send();
     }
-  }
-  async verifyToken(req, res) {
-    const { token } = req.body;
+  };
+
+  verifyToken = async ({ body: { token } }: express.Request, res: express.Response): Promise<express.Response> => {
     try {
       await jwt.verify(token, process.env.SECRET);
       return res.status(200).send();
     } catch (err) {
       return res.status(401).send();
     }
-  }
+  };
 }
 
-export default phoneController;
+export default PhoneController;

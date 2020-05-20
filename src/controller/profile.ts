@@ -1,44 +1,36 @@
-import model from '../model';
+import express from 'express';
 import dotenv from 'dotenv';
+import model from '../model';
+import cloudinary from '../utils/cloudinary';
 
 dotenv.config();
-const cloudinary = require('cloudinary').v2;
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_NAME,
-  api_key: process.env.CLOUDINARY_API,
-  api_secret: process.env.CLOUDINARY_SECRET,
-});
-
-class profileController {
-  async uploadAvatar(req, res) {
-    const { image, _id } = req.body;
-    try {
-      const result = await cloudinary.uploader.upload(
-        'data:image/jpeg;base64,' + image,
-      );
-      await model.phone.updateOne({ _id }, { avatar: result.url });
-      return res.status(200).json({ avatar: result.url });
-    } catch (err) {
-      return res.status(500).send();
-    }
+class ProfileController {
+uploadAvatar = async ({ body: { image, _id } }: express.Request, res: express.Response): Promise<express.Response> => {
+  try {
+    const result = await cloudinary.uploader.upload(
+      `data:image/jpeg;base64,${image}`,
+    );
+    await model.user.updateOne({ _id }, { avatar: result.url });
+    return res.status(200).json({ avatar: result.url });
+  } catch (err) {
+    return res.status(500).send();
   }
+};
 
-  async getAvatar(req, res) {
-    const { _id } = req.body;
+  getAvatar = async ({ body: { _id } }: express.Request, res: express.Response): Promise<express.Response> => {
     try {
-      const { avatar } = await model.phone.findOne({
+      const { avatar } = await model.user.findOne({
         _id,
       });
       if (avatar) {
         return res.status(200).json({ avatar });
-      } else {
-        return res.status(401).send();
       }
+      return res.status(401).send();
     } catch (err) {
       return res.status(500).send();
     }
-  }
+  };
 }
 
-export default profileController;
+export default ProfileController;

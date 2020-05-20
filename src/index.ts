@@ -1,11 +1,14 @@
 import Express from 'express';
-const app = Express();
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { database } from './database';
 import bodyParser from 'body-parser';
-import router from './routes';
+import database from './database';
+import constantRoutes from './routes/constantRoutes';
+import api from './routes';
+import exceptionRoutes from './routes/exceptionRoutes';
+import * as logger from './utils/logger';
 
+const app = Express();
 dotenv.config();
 
 app.use(
@@ -17,24 +20,13 @@ app.use(
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: false }));
 app.use(bodyParser.json({ limit: '10mb' }));
 
-app.use('/api/post', router.post);
-app.use('/api/phone', router.phone);
-app.use('/api/profile', router.profile);
+app.use(constantRoutes.API, exceptionRoutes);
+app.use(constantRoutes.API, api);
 
-app.get('/', (req, res) => {
-  res.send('Hello');
-});
-
-app.post('/api', (req, res) => {
-  return res.status(200).send();
-});
-
-app.listen(process.env.PORT, () => {
-  database()
-    .then((res) => {
-      console.log(`Backend listening on ${process.env.PORT} port!`);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+app.listen(process.env.PORT, async () => {
+  try {
+    await database();
+  } catch (err) {
+    logger.error(err);
+  }
 });

@@ -1,5 +1,5 @@
-import phone from './phone';
-import profile from './profile';
-import post from './post';
+import Phone from './phone';
+import Profile from './profile';
+import Post from './post';
 
-export default {phone, profile, post};
+export default { Phone, Profile, Post };

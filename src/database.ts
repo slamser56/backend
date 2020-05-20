@@ -1,24 +1,19 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+
 dotenv.config();
 
-export const database = async () => {
+const database = async (): Promise<void> => {
   try {
     mongoose.set('debug', true);
-    await mongoose.connect(
-      String(process.env.MONGO_URL),
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      },
-      function (err) {
-        if (err) {
-          Promise.reject()
-        }
-      },
-    );
+    await mongoose.connect(process.env.MONGO_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     Promise.resolve();
   } catch (error) {
     Promise.reject(error);
   }
 };
+
+export default database;

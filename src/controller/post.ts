@@ -1,17 +1,16 @@
-import model from '../model';
 import dotenv from 'dotenv';
+import express from 'express';
+import model from '../model';
+import cloudinary from '../utils/cloudinary';
+
 dotenv.config();
-const cloudinary = require('cloudinary').v2;
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_NAME,
-  api_key: process.env.CLOUDINARY_API,
-  api_secret: process.env.CLOUDINARY_SECRET,
-});
-
-class postController {
-  async uploadPost(req, res) {
-    const { _id, text, date, images } = req.body;
+class PostController {
+  uploadPost = async ({
+    body: {
+      _id, text, date, images,
+    },
+  }: express.Request, res: express.Response): Promise<express.Response> => {
     try {
       await model.post.updateOne(
         { idUser: _id },
@@ -23,7 +22,7 @@ class postController {
     } catch (err) {
       return res.status(500).send();
     }
-  }
+  };
 }
 
-export default postController;
+export default PostController;
