@@ -1,0 +1,29 @@
+import dotenv from 'dotenv';
+import model from '../model';
+import cloudinary from '../utils/cloudinary';
+
+dotenv.config();
+
+export const uploadAvatar = async (image: string, idUser: string): Promise<string | void> => {
+  try {
+    const result = await cloudinary.uploader.upload(`data:image/jpeg;base64,${image}`);
+    await model.user.updateOne({ _id: idUser }, { avatar: result.url });
+    return Promise.resolve(result.url);
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
+
+export const getAvatar = async (idUser: string): Promise<string> => {
+  try {
+    const { avatar } = await model.user.findOne({
+      _id: idUser,
+    });
+    if (avatar) {
+      return Promise.resolve(avatar);
+    }
+    return Promise.reject({ status: 401 });
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};

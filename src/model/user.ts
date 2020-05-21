@@ -1,7 +1,8 @@
 import mongoose, { Schema } from 'mongoose';
+import constantModels from './constantModels';
 
 interface UserInterface extends mongoose.Document{
-  _id: Schema.Types.ObjectId;
+  _id: string;
   avatar: string;
   phoneNumber: number;
 }
@@ -21,4 +22,4 @@ user.set('toJSON', {
   virtuals: true,
 });
 
-export default mongoose.model<UserInterface>('user', user);
+export default mongoose.model<UserInterface>(constantModels.USER, user);

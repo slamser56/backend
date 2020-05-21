@@ -8,13 +8,13 @@ dotenv.config();
 class PostController {
   uploadPost = async ({
     body: {
-      _id, text, date, images,
+      idUser, text, date, images,
     },
   }: express.Request, res: express.Response): Promise<express.Response> => {
     try {
       await model.post.updateOne(
-        { idUser: _id },
-        { idUser: _id, text, date },
+        { idUser },
+        { idUser, text, date },
         { upsert: true },
       );
 

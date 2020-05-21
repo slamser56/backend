@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import constantModels from './constantModels';
 
 const { Schema } = mongoose;
 
@@ -17,4 +18,4 @@ image.set('toJSON', {
   virtuals: true,
 });
 
-export default mongoose.model('image', image);
+export default mongoose.model(constantModels.IMAGE, image);

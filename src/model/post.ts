@@ -1,7 +1,8 @@
 import mongoose, { Schema } from 'mongoose';
+import constantModels from './constantModels';
 
 export interface PostInterface extends mongoose.Document{
-  _id: Schema.Types.ObjectId;
+  _id: string;
   idUser: string;
   text: string;
   date: Date;
@@ -31,4 +32,4 @@ post.set('toJSON', {
   virtuals: true,
 });
 
-export default mongoose.model<PostInterface>('post', post);
+export default mongoose.model<PostInterface>(constantModels.POST, post);

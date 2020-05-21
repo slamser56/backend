@@ -19,6 +19,7 @@ module.exports = {
   ],
   rules: {
     'no-underscore-dangle':  ['error', { 'allow': ['_id'] }],
+    'prefer-promise-reject-errors': 'off',
     '@typescript-eslint/no-var-requires': 'off',
     'camelcase': 'off',
     '@typescript-eslint/camelcase': 'off',

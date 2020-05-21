@@ -1,8 +1,9 @@
 import mongoose, { Schema } from 'mongoose';
+import constantModels from './constantModels';
 
 
 export interface PhoneVerificationInterface extends mongoose.Document{
-  _id: Schema.Types.ObjectId;
+  _id: string;
   code: number;
   phoneNumber: number;
 }
@@ -24,4 +25,4 @@ phoneVerification.set('toJSON', {
   virtuals: true,
 });
 
-export default mongoose.model<PhoneVerificationInterface>('phoneVerification', phoneVerification);
+export default mongoose.model<PhoneVerificationInterface>(constantModels.PHONE_VERIFICATION, phoneVerification);
