@@ -2,14 +2,14 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import * as logger from '../utils/logger';
-import * as phoneAction from '../action/phone';
+import { setCode, findCode } from '../databaseService/phone';
 
 dotenv.config();
 
 class PhoneController {
   sendCode = async ({ body: { phoneNumber } }: express.Request, res: express.Response): Promise<express.Response> => {
     try {
-      await phoneAction.sendCode(phoneNumber);
+      await setCode(phoneNumber);
       return res.status(200).send();
     } catch (err) {
       if (err.status) {
@@ -20,12 +20,12 @@ class PhoneController {
     }
   };
 
-  codeVerify = async (
+  verifyCode = async (
     { body: { phoneNumber, code } }: express.Request,
     res: express.Response,
   ): Promise<express.Response> => {
     try {
-      const token = await phoneAction.codeVerify(phoneNumber, code);
+      const token = await findCode(phoneNumber, code);
       return res.status(200).json({ token });
     } catch (err) {
       if (err.status) {

@@ -5,10 +5,10 @@ enum constantRoutes {
     PHONE = '/phone',
     PROFILE = '/profile',
     SEND_CODE='/sendCode',
-    CODE_VERIFY='/codeVerify',
+    VERIFY_CODE='/verifyCode',
     VERIFY_TOKEN='/verifyToken',
     UPLOAD_AVATAR='/uploadAvatar',
-    GET_AVATAR='/getAvatar',
+    DOWNLOAD_AVATAR='/downloadAvatar',
     UPLOAD_POST='/uploadPost',
 }
 

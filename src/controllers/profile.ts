@@ -1,6 +1,6 @@
 import express from 'express';
 import * as logger from '../utils/logger';
-import * as profileAction from '../action/profile';
+import { setAvatar, getAvatar } from '../databaseService/profile';
 
 class ProfileController {
   uploadAvatar = async (
@@ -8,7 +8,7 @@ class ProfileController {
     res: express.Response,
   ): Promise<express.Response> => {
     try {
-      const avatar = await profileAction.uploadAvatar(image, idUser);
+      const avatar = await setAvatar(image, idUser);
       return res.status(200).json({ avatar });
     } catch (err) {
       logger.error(err);
@@ -16,9 +16,9 @@ class ProfileController {
     }
   };
 
-  getAvatar = async ({ body: { idUser } }: express.Request, res: express.Response): Promise<express.Response> => {
+  downloadAvatar = async ({ body: { idUser } }: express.Request, res: express.Response): Promise<express.Response> => {
     try {
-      const avatar = await profileAction.getAvatar(idUser);
+      const avatar = await getAvatar(idUser);
       return res.status(200).json({ avatar });
     } catch (err) {
       if (err.status) {

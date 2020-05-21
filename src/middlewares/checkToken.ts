@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import express from 'express';
 
-const checkJWT = async (
+const checkToken = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction,
@@ -15,4 +15,4 @@ const checkJWT = async (
   return next();
 };
 
-export default checkJWT;
+export default checkToken;

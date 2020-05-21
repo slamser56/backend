@@ -9,7 +9,9 @@
     "tsc": "tsc",
     "lint": "eslint . --ext .ts"
   },
-  "pre-commit": [ "lint" ],
+  "pre-commit": [
+    "lint"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/slamser56/backend.git"
@@ -27,6 +29,7 @@
     "dotenv": "8.2.0",
     "express": "4.17.1",
     "jsonwebtoken": "8.5.1",
+    "moment": "2.26.0",
     "mongoose": "5.9.13",
     "telesignsdk": "2.2.1"
   },
