@@ -16,8 +16,11 @@ module.exports = {
     'plugin:import/typescript',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
+    'prettier',
+    'prettier/@typescript-eslint',
   ],
   rules: {
+    'no-throw-literal': 'off',
     'no-underscore-dangle':  ['error', { 'allow': ['_id'] }],
     'prefer-promise-reject-errors': 'off',
     '@typescript-eslint/no-var-requires': 'off',

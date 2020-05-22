@@ -26,7 +26,7 @@ app.use(constantRoutes.API, api);
 app.listen(process.env.PORT, async () => {
   try {
     await database();
-  } catch (err) {
-    logger.error(err);
+  } catch (error) {
+    logger.error(error);
   }
 });

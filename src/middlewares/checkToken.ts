@@ -1,5 +1,9 @@
 import jwt from 'jsonwebtoken';
 import express from 'express';
+import dotenv from 'dotenv';
+import lodash from 'lodash';
+
+dotenv.config();
 
 const checkToken = async (
   req: express.Request,
@@ -7,10 +11,10 @@ const checkToken = async (
   next: express.NextFunction,
 ): Promise<express.Response | void> => {
   try {
-    const { idUser } = jwt.verify(req.body.token, process.env.SECRET);
+    const { idUser } = jwt.verify(req.headers.authorization.split(' ')[1], process.env.SECRET);
     req.body.idUser = idUser;
   } catch (error) {
-    return res.status(401).send();
+    res.status(401).send();
   }
   return next();
 };
