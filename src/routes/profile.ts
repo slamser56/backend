@@ -6,6 +6,6 @@ const router = express.Router();
 const profileController = new controller.Profile();
 
 router.post(constantRoutes.UPLOAD_AVATAR, profileController.uploadAvatar);
-router.post(constantRoutes.DOWNLOAD_AVATAR, profileController.downloadAvatar);
+router.post(constantRoutes.GET_PROFILE, profileController.getProfile);
 
 export default router;

@@ -1,8 +1,8 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import * as logger from '../utils/logger';
-import { setCode, findCode, deleteCode } from '../databaseService/phone';
-import { setUser } from '../databaseService/user';
+import { createCode, findCode, deleteCode } from '../databaseService/phone';
+import createOrUpdatePhoneNumber from '../databaseService/user';
 import getExpiredTime from '../utils/expiredTime';
 import getGeneratedCode from '../utils/codeGenerator';
 import smsMessage from '../utils/teleSign';
@@ -11,7 +11,7 @@ class PhoneController {
   sendCode = async ({ body: { phoneNumber } }: express.Request, res: express.Response): Promise<void> => {
     try {
       const code = getGeneratedCode();
-      await setCode(phoneNumber, code);
+      await createCode(phoneNumber, code);
       smsMessage(phoneNumber, code);
       res.status(200).send();
     } catch (error) {
@@ -23,9 +23,12 @@ class PhoneController {
   verifyCode = async ({ body: { phoneNumber, code } }: express.Request, res: express.Response): Promise<void> => {
     try {
       const find = await findCode(phoneNumber, code);
-      if (!find) throw { status: 404 };
+      if (!find) {
+        res.status(404).send();
+        return;
+      }
       await deleteCode(phoneNumber, code);
-      const idUser = await setUser(phoneNumber);
+      const idUser = await createOrUpdatePhoneNumber(phoneNumber);
       const token = jwt.sign({ getExpiredTime, phoneNumber, idUser }, process.env.SECRET);
       res.status(200).json({ token });
     } catch (error) {
