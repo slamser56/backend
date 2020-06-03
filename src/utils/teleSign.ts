@@ -19,6 +19,6 @@ function messageCallback(err: string, reply: string): void {
   }
 }
 
-export default function smsMessage(phoneNumber: number, code: number): void{
+export default function smsMessage(phoneNumber: number, code: number): void {
   client.sms.message(messageCallback, phoneNumber, `Code: ${code}`, 'ARN');
 }
