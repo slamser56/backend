@@ -1,7 +1,7 @@
 import model from '../models';
 import { PhoneVerificationInterface } from '../models/phoneVerification';
 
-export const createCode = async (phoneNumber: number, code: number): Promise<void> => {
+export const createOrUpdateCode = async (phoneNumber: number, code: number): Promise<void> => {
   await model.phoneVerification.updateOne({ phoneNumber }, { phoneNumber, code }, { upsert: true });
 };
 

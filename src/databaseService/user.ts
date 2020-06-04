@@ -1,8 +1,13 @@
 import model from '../models';
 
-const createOrUpdatePhoneNumber = async (phoneNumber: number): Promise<string> => {
-  const { _id } = await model.user.findOneAndUpdate({ phoneNumber }, { phoneNumber }, { upsert: true, new: true });
+export const findOrCreatePhoneNumber = async (phoneNumber: number): Promise<string> => {
+  const find = await model.user.findOne({ phoneNumber });
+  if (find) return find._id;
+  const { _id } = await model.user.create({ phoneNumber });
   return _id;
 };
 
-export default createOrUpdatePhoneNumber;
+export const readPhoneNumber = async (idUser: string): Promise<number> => {
+  const { phoneNumber } = await model.user.findById(idUser);
+  return phoneNumber;
+};

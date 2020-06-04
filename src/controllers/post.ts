@@ -1,18 +1,17 @@
 import express from 'express';
-import moment from 'moment';
-import model from '../models';
 import * as logger from '../utils/logger';
-import cloudinary from '../utils/cloudinary';
+import createPost from '../databaseService/post';
 
 class PostController {
-  uploadPost = async (
-    { body: { idUser, text, images } }: express.Request,
-    res: express.Response,
-  ): Promise<void> => {
+  uploadPost = async ({ body: { idUser, text } }: express.Request, res: express.Response): Promise<void> => {
     try {
-      await model.post.create({ idUser, text, date: Date() });
-      res.status(200).send();
+      if (!text || !idUser) {
+        res.status(400).send();
+      }
+      await createPost(idUser, text);
+      res.status(201).send();
     } catch (error) {
+      logger.error(error);
       res.status(500).send();
     }
   };

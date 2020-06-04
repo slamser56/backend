@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 import constantModels from './constantModels';
 
-interface UserInterface extends mongoose.Document{
+export interface UserInterface extends mongoose.Document{
   _id: string;
   avatar: string;
   phoneNumber: number;

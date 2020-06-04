@@ -13,12 +13,12 @@ const client = new TeleSignSDK(
 );
 function messageCallback(err: string, reply: string): void {
   if (err) {
-    logger.info("Error: Could not reach TeleSign's servers");
+    logger.error("Error: Could not reach TeleSign's servers", err);
   } else {
     logger.info('YAY!, the SMS message is being sent now by TeleSign!');
   }
 }
 
-export default function smsMessage(phoneNumber: number, code: number): void {
+export default function sendSmsMessage(phoneNumber: number, code: number): void {
   client.sms.message(messageCallback, phoneNumber, `Code: ${code}`, 'ARN');
 }
