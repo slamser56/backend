@@ -1,7 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import * as logger from '../utils/logger';
-import { createOrUpdateCode, readCode, deleteCode } from '../databaseService/phone';
+import { createOrUpdateCode, findCode, deleteCode } from '../databaseService/phone';
 import { findOrCreatePhoneNumber } from '../databaseService/user';
 import getExpiredTime from '../utils/expiredTime';
 import getGeneratedCode from '../utils/codeGenerator';
@@ -22,9 +22,9 @@ class PhoneController {
 
   verifyCode = async ({ body: { phoneNumber, code } }: express.Request, res: express.Response): Promise<void> => {
     try {
-      const foundCode = await readCode(phoneNumber, code);
+      const foundCode = await findCode(phoneNumber, code);
       if (!foundCode) {
-        res.status(404).send();
+        res.status(404).send('Сode not verified');
         return;
       }
       await deleteCode(phoneNumber, code);

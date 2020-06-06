@@ -7,7 +7,7 @@ export const findOrCreatePhoneNumber = async (phoneNumber: number): Promise<stri
   return _id;
 };
 
-export const readPhoneNumber = async (idUser: string): Promise<number> => {
+export const findPhoneNumber = async (idUser: string): Promise<number> => {
   const { phoneNumber } = await model.user.findById(idUser);
   return phoneNumber;
 };

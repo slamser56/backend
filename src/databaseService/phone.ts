@@ -5,7 +5,7 @@ export const createOrUpdateCode = async (phoneNumber: number, code: number): Pro
   await model.phoneVerification.updateOne({ phoneNumber }, { phoneNumber, code }, { upsert: true });
 };
 
-export const readCode = async (phoneNumber: number, code: number): Promise<PhoneVerificationInterface> => {
+export const findCode = async (phoneNumber: number, code: number): Promise<PhoneVerificationInterface> => {
   const find = await model.phoneVerification.findOne({
     phoneNumber,
     code,

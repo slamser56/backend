@@ -5,8 +5,8 @@ import createPost from '../databaseService/post';
 class PostController {
   uploadPost = async ({ body: { idUser, text } }: express.Request, res: express.Response): Promise<void> => {
     try {
-      if (!text || !idUser) {
-        res.status(400).send();
+      if (!text) {
+        res.status(400).send('Please input text');
       }
       await createPost(idUser, text);
       res.status(201).send();
