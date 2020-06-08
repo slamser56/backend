@@ -23,9 +23,6 @@ const post = new Schema({
     type: Date,
     required: true,
   },
-  images: {
-    type: Array,
-  },
 });
 
 post.set('toJSON', {

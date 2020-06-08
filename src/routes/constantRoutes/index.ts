@@ -11,6 +11,7 @@ enum constantRoutes {
     DOWNLOAD_AVATAR='/downloadAvatar',
     UPLOAD_POST='/uploadPost',
     GET_PROFILE='/getProfile',
+    GET_POSTS='/getPosts',
 }
 
 export default constantRoutes;
