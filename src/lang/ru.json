@@ -1,0 +1,9 @@
+{
+  "message": {
+    "somethingWrong": "Что-то не так",
+    "inputCorrectCode": "Введите корректный код",
+    "pleaseInputText": "Пожалуйста введите текст",
+    "codeNotVerified": "Код не проверен",
+    "postsNotFound": "Посты не найдены"
+  }
+}

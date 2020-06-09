@@ -3,6 +3,7 @@ import cloudinary, { constantCloudinary } from '../utils/cloudinary';
 import * as logger from '../utils/logger';
 import { updateAvatar, findAvatar } from '../databaseService/profile';
 import { findPhoneNumber } from '../databaseService/user';
+import { t } from '../lang';
 
 class ProfileController {
   uploadAvatar = async ({ body: { image, idUser } }: express.Request, res: express.Response): Promise<void> => {
@@ -12,7 +13,7 @@ class ProfileController {
       res.status(201).json({ avatar: url });
     } catch (error) {
       logger.error(error);
-      res.status(500).send();
+      res.status(500).send(t('message.somethingWrong'));
     }
   };
 
@@ -23,7 +24,7 @@ class ProfileController {
       res.status(200).json({ avatar, phoneNumber });
     } catch (error) {
       logger.error(error);
-      res.status(500).send();
+      res.status(500).send(t('message.somethingWrong'));
     }
   };
 }

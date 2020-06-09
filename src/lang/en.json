@@ -1,0 +1,9 @@
+{
+  "message": {
+    "somethingWrong": "Something wrong",
+    "inputCorrectCode": "Input correct code",
+    "pleaseInputText": "Please input text",
+    "codeNotVerified": "Сode not verified",
+    "postsNotFound": "Posts not found"
+  }
+}

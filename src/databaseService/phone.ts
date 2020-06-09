@@ -1,4 +1,5 @@
 import model from '../models';
+import { t } from '../lang';
 import { PhoneVerificationInterface } from '../models/phoneVerification';
 
 export const createOrUpdateCode = async (phoneNumber: number, code: number): Promise<void> => {
@@ -10,6 +11,9 @@ export const findCode = async (phoneNumber: number, code: number): Promise<Phone
     phoneNumber,
     code,
   });
+  if (!find) {
+    return Promise.reject({ status: 404, message: t('message.codeNotVerified') });
+  }
   return find;
 };
 
