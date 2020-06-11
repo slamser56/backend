@@ -1,11 +1,11 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
+import { verify } from 'jsonwebtoken';
 import * as logger from '../utils/logger';
 
 class TokenController {
   verifyToken = async ({ body: { token } }: express.Request, res: express.Response): Promise<void> => {
     try {
-      jwt.verify(token, process.env.SECRET);
+      verify(token, process.env.SECRET);
       res.status(200).send();
     } catch (error) {
       logger.error(error);
@@ -13,6 +13,5 @@ class TokenController {
     }
   };
 }
-
 
 export default TokenController;

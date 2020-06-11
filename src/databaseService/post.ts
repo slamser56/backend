@@ -1,6 +1,6 @@
 import model from '../models';
 import { PostInterface } from '../models/post';
-import { t } from '../lang';
+import t from '../lang/index';
 
 export const createPost = async (idUser: string, text: string): Promise<void> => {
   await model.post.create({ idUser, text, date: Date() });

@@ -1,5 +1,5 @@
 import model from '../models';
-import { t } from '../lang';
+import t from '../lang/index';
 import { PhoneVerificationInterface } from '../models/phoneVerification';
 
 export const createOrUpdateCode = async (phoneNumber: number, code: number): Promise<void> => {

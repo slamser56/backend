@@ -1,7 +1,7 @@
 import express from 'express';
 import * as logger from '../utils/logger';
 import { createPost, findPosts } from '../databaseService/post';
-import { t } from '../lang';
+import t from '../lang/index';
 
 class PostController {
   uploadPost = async ({ body: { idUser, text } }: express.Request, res: express.Response): Promise<void> => {

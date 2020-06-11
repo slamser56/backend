@@ -7,7 +7,7 @@ import getExpiredTime from '../utils/expiredTime';
 import getGeneratedCode from '../utils/codeGenerator';
 import sendSmsMessage from '../utils/teleSign';
 import checkPhoneNumber from '../utils/validations';
-import { t } from '../lang';
+import t from '../lang/index';
 
 class PhoneController {
   sendCode = async ({ body: { phoneNumber } }: express.Request, res: express.Response): Promise<void> => {

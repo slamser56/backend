@@ -3,7 +3,7 @@ import cloudinary, { constantCloudinary } from '../utils/cloudinary';
 import * as logger from '../utils/logger';
 import { updateAvatar, findAvatar } from '../databaseService/profile';
 import { findPhoneNumber } from '../databaseService/user';
-import { t } from '../lang';
+import t from '../lang/index';
 
 class ProfileController {
   uploadAvatar = async ({ body: { image, idUser } }: express.Request, res: express.Response): Promise<void> => {
