@@ -13,7 +13,7 @@ class ProfileController {
       res.status(201).json({ avatar: url });
     } catch (error) {
       logger.error(error);
-      res.status(500).send(t('message.somethingWrong'));
+      res.status(error?.status ?? 500).send(error?.message ?? t('message.somethingWrong'));
     }
   };
 
@@ -24,7 +24,7 @@ class ProfileController {
       res.status(200).json({ avatar, phoneNumber });
     } catch (error) {
       logger.error(error);
-      res.status(500).send(t('message.somethingWrong'));
+      res.status(error?.status ?? 500).send(error?.message ?? t('message.somethingWrong'));
     }
   };
 }

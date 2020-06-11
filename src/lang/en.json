@@ -1,6 +1,7 @@
 {
   "message": {
     "somethingWrong": "Something wrong",
+    "inputCorrectPhoneNumber": "Input correct phone number",
     "inputCorrectCode": "Input correct code",
     "pleaseInputText": "Please input text",
     "codeNotVerified": "Сode not verified",

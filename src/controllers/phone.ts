@@ -1,19 +1,19 @@
 import express from 'express';
 import { sign } from 'jsonwebtoken';
-import { get } from 'lodash';
 import * as logger from '../utils/logger';
 import { createOrUpdateCode, findCode, deleteCode } from '../databaseService/phone';
 import { findOrCreatePhoneNumber } from '../databaseService/user';
 import getExpiredTime from '../utils/expiredTime';
 import getGeneratedCode from '../utils/codeGenerator';
 import sendSmsMessage from '../utils/teleSign';
+import checkPhoneNumber from '../utils/validations';
 import { t } from '../lang';
 
 class PhoneController {
   sendCode = async ({ body: { phoneNumber } }: express.Request, res: express.Response): Promise<void> => {
     try {
-      if (!/^(\+?\d{12})/.exec(phoneNumber)) {
-        res.status(400).send(t('message.inputCorrectCode'));
+      if (!checkPhoneNumber(phoneNumber)) {
+        res.status(400).send(t('message.inputCorrectPhoneNumber'));
       }
       const code = getGeneratedCode();
       await createOrUpdateCode(phoneNumber, code);
@@ -21,9 +21,7 @@ class PhoneController {
       res.status(200).send();
     } catch (error) {
       logger.error(error);
-      get(error, 'status')
-        ? res.status(error.status).send(error.message)
-        : res.status(500).send(t('message.somethingWrong'));
+      res.status(error?.status ?? 500).send(error?.message ?? t('message.somethingWrong'));
     }
   };
 
@@ -36,9 +34,7 @@ class PhoneController {
       res.status(200).json({ token });
     } catch (error) {
       logger.error(error);
-      get(error, 'status')
-        ? res.status(error.status).send(error.message)
-        : res.status(500).send(t('message.somethingWrong'));
+      res.status(error?.status ?? 500).send(error?.message ?? t('message.somethingWrong'));
     }
   };
 }
