@@ -6,7 +6,7 @@ import { findOrCreatePhoneNumber } from '../databaseService/user';
 import getExpiredTime from '../utils/expiredTime';
 import getGeneratedCode from '../utils/codeGenerator';
 import sendSmsMessage from '../utils/teleSign';
-import checkPhoneNumber from '../utils/validations';
+import { checkPhoneNumber } from '../utils/validations';
 import t from '../lang/index';
 
 class PhoneController {
@@ -14,6 +14,7 @@ class PhoneController {
     try {
       if (!checkPhoneNumber(phoneNumber)) {
         res.status(400).send(t('message.inputCorrectPhoneNumber'));
+        return;
       }
       const code = getGeneratedCode();
       await createOrUpdateCode(phoneNumber, code);

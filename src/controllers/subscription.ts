@@ -2,7 +2,8 @@ import express from 'express';
 import * as logger from '../utils/logger';
 import { createOrUpdateSubscribe, deleteSubscribe, findSubscribes } from '../databaseService/subscription';
 import t from '../lang/index';
-import { SubscriptionInterface, UserSubscriptionInterface } from '../models/subscription';
+import { checkId } from '../utils/validations';
+import { UserSubscriptionInterface } from '../models/subscription';
 
 class SubscriptionController {
   subscribe = async (
@@ -23,6 +24,10 @@ class SubscriptionController {
     res: express.Response,
   ): Promise<void> => {
     try {
+      if (!checkId(idUserSubscription)) {
+        res.status(400).send(t('message.badId'));
+        return;
+      }
       await deleteSubscribe(idUser, idUserSubscription);
       res.status(200).send();
     } catch (error) {

@@ -8,6 +8,7 @@ class PostController {
     try {
       if (!text) {
         res.status(400).send(t('message.pleaseInputText'));
+        return;
       }
       await createPost(idUser, text);
       res.status(201).send();

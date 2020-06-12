@@ -4,7 +4,7 @@ import constantModels from '../models/constantModels';
 import t from '../lang/index';
 
 export const createOrUpdateSubscribe = async (idUser: string, idUserSubscription: string): Promise<void> => {
-  await model.subscription.updateOne({ idUser, idUserSubscription }, { upsert: true });
+  await model.subscription.updateOne({ idUser, idUserSubscription }, { idUser, idUserSubscription }, { upsert: true });
 };
 
 export const deleteSubscribe = async (idUser: string, idUserSubscription: string): Promise<void> => {

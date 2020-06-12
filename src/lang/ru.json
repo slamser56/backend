@@ -5,6 +5,8 @@
     "inputCorrectCode": "Введите корректный код",
     "pleaseInputText": "Пожалуйста введите текст",
     "codeNotVerified": "Код не проверен",
-    "postsNotFound": "Посты не найдены"
+    "postsNotFound": "Посты не найдены",
+    "subscribeNotFound": "Подписка не найдена",
+    "badId": "Плохой ИД"
   }
 }

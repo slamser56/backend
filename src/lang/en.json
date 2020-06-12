@@ -6,6 +6,7 @@
     "pleaseInputText": "Please input text",
     "codeNotVerified": "Сode not verified",
     "postsNotFound": "Posts not found",
-    "subscribeNotFound": "Subscribe not found"
+    "subscribeNotFound": "Subscribe not found",
+    "badId": "Bad id"
   }
 }

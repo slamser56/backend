@@ -1,5 +1,7 @@
-function checkPhoneNumber(phoneNumber: string): boolean {
+export function checkPhoneNumber(phoneNumber: string): boolean {
   return !!/^(\+?\d{12})/.exec(phoneNumber);
 }
 
-export default checkPhoneNumber;
+export function checkId(id: string): boolean {
+  return id?.length === 24;
+}
