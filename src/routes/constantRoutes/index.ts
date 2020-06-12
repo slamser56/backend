@@ -12,6 +12,10 @@ enum constantRoutes {
     UPLOAD_POST='/uploadPost',
     GET_PROFILE='/getProfile',
     GET_POSTS='/getPosts',
+    SUBSCRIPTION='/subscription',
+    SUBSCRIBE='/subscribe',
+    UNSUBSCRIBE='/unsubscribe',
+    GET_SUBSCRIBE='/getSubscribe',
 }
 
 export default constantRoutes;
