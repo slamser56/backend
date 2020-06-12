@@ -1,30 +1,34 @@
-import Express = require('express');
+import Express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import database from './database';
+import constantRoutes from './routes/constantRoutes';
+import api from './routes';
+import exceptionRoutes from './routes/exceptionRoutes';
+import * as logger from './utils/logger';
+import setLanguage from './middlewares/setLanguage';
+
 const app = Express();
-import config = require('./config');
-import database = require('./database');
-import bodyParser = require('body-parser')
+dotenv.config();
 
+app.use(
+  cors({
+    credentials: true,
+  }),
+);
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: false }));
+app.use(bodyParser.json({ limit: '10mb' }));
 
+app.use(constantRoutes.API, setLanguage);
+app.use(constantRoutes.API, exceptionRoutes);
+app.use(constantRoutes.API, api);
 
-app.get('/', (req, res) => {
-    res.send('Hello')
+app.listen(process.env.PORT, async () => {
+  try {
+    await database();
+  } catch (error) {
+    logger.error(error);
+  }
 });
-
-app.post('/api', (req, res) => {
-        res.json({status: true});
-  });
-
-app.listen(config.PORT, () => {
-    database().then( (res) =>{
-        if(res){
-        console.log(`Backend listening on ${config.PORT} port!`);
-    }
-    }).catch((err) =>{
-        console.log(err)
-    })
-});
-
-

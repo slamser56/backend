@@ -36,6 +36,7 @@ branch.json
 */gradle.properties
 # node.js
 #
+dist/
 node_modules/
 npm-debug.log
 yarn-error.log
