@@ -1,27 +1,36 @@
 import express from 'express';
 import * as logger from '../utils/logger';
-import { createPost, findPosts } from '../databaseService/post';
+import { createPost, findPosts, deletePost } from '../databaseService/post';
 import t from '../lang/index';
 
 class PostController {
-  uploadPost = async ({ body: { idUser, text } }: express.Request, res: express.Response): Promise<void> => {
+  uploadPost = async ({ body: { userId, text } }: express.Request, res: express.Response): Promise<void> => {
     try {
       if (!text) {
-        res.status(400).send(t('message.pleaseInputText'));
-        return;
+        throw { status: 400, message: t('message.pleaseInputText') };
       }
-      await createPost(idUser, text);
-      res.status(201).send();
+      const post = await createPost(userId, text);
+      res.status(201).send(post);
     } catch (error) {
       logger.error(error);
       res.status(error?.status ?? 500).send(error?.message ?? t('message.somethingWrong'));
     }
   };
 
-  getPosts = async ({ body: { idUser } }: express.Request, res: express.Response): Promise<void> => {
+  getPosts = async ({ body: { userId } }: express.Request, res: express.Response): Promise<void> => {
     try {
-      const posts = await findPosts(idUser);
-      res.status(200).json({ data: posts.map((value) => ({ text: value.text, date: value.date })) });
+      const posts = await findPosts(userId);
+      res.status(200).json({ data: posts.map((value) => ({ text: value.text, date: value.date, id: value._id })) });
+    } catch (error) {
+      logger.error(error);
+      res.status(error?.status ?? 500).send(error?.message ?? t('message.somethingWrong'));
+    }
+  };
+
+  deletePost = async ({ body: { userId, idPost } }: express.Request, res: express.Response): Promise<void> => {
+    try {
+      await deletePost(userId, idPost);
+      res.status(200).send();
     } catch (error) {
       logger.error(error);
       res.status(error?.status ?? 500).send(error?.message ?? t('message.somethingWrong'));

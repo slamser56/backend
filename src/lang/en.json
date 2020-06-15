@@ -7,6 +7,10 @@
     "codeNotVerified": "Сode not verified",
     "postsNotFound": "Posts not found",
     "subscribeNotFound": "Subscribe not found",
-    "badId": "Bad id"
+    "badId": "Bad id",
+    "thisPhoneNumberIsRegistered": "This phone number is registered",
+    "inputCorrectPassword":"Input correct password",
+    "passwordNotVerified":"Password not verified",
+    "inputCorrectUserOrPassword":"Input correct user or password"
   }
 }

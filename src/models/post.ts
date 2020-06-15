@@ -1,29 +1,33 @@
 import mongoose, { Schema } from 'mongoose';
 import constantModels from './constantModels';
 
-export interface PostInterface extends mongoose.Document{
-  _id: string;
-  idUser: string;
+export interface PostInterface extends mongoose.Document {
+  userId: string;
   text: string;
-  date: Date;
-  images: Array<string>;
+  deleted: boolean;
 }
 
-const post = new Schema({
-  idUser: {
-    type: Schema.Types.ObjectId,
-    ref: 'user',
-    required: true,
+const post = new Schema(
+  {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
+    },
+    postTextId: {
+      type: Schema.Types.ObjectId,
+      ref: 'postText',
+      required: true,
+    },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
   },
-  text: {
-    type: String,
-    required: true,
+  {
+    timestamps: true,
   },
-  date: {
-    type: Date,
-    required: true,
-  },
-});
+);
 
 post.set('toJSON', {
   virtuals: true,

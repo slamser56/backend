@@ -2,7 +2,6 @@ import mongoose, { Schema } from 'mongoose';
 import constantModels from './constantModels';
 
 export interface PhoneVerificationInterface extends mongoose.Document {
-  _id: string;
   code: number;
   phoneNumber: number;
 }

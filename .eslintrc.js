@@ -20,6 +20,7 @@ module.exports = {
     'prettier/@typescript-eslint',
   ],
   rules: {
+    'no-else-return': 'off',
     'no-unused-expressions': 'off',
     'new-cap': 'off',
     'no-throw-literal': 'off',

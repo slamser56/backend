@@ -2,30 +2,39 @@ import mongoose, { Schema } from 'mongoose';
 import constantModels from './constantModels';
 
 export interface SubscriptionInterface extends mongoose.Document {
-  _id: string;
-  idUser: string;
-  idUserSubscription: string | {}
+  userId: string;
+  userIdSubscription: string | {};
+  deleted: boolean;
 }
 
 export interface UserSubscriptionInterface extends SubscriptionInterface {
-  idUserSubscription: {
+  userIdSubscription: {
     id: string;
     phoneNumber: number;
-  }
+  };
 }
 
-const post = new Schema({
-  idUser: {
-    type: Schema.Types.ObjectId,
-    ref: 'user',
-    required: true,
+const post = new Schema(
+  {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
+    },
+    userIdSubscription: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
+    },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
   },
-  idUserSubscription: {
-    type: Schema.Types.ObjectId,
-    ref: 'user',
-    required: true,
+  {
+    timestamps: true,
   },
-});
+);
 
 post.set('toJSON', {
   virtuals: true,

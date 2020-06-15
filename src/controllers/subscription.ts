@@ -7,11 +7,11 @@ import { UserSubscriptionInterface } from '../models/subscription';
 
 class SubscriptionController {
   subscribe = async (
-    { body: { idUser, idUserSubscription } }: express.Request,
+    { body: { userId, userIdSubscription } }: express.Request,
     res: express.Response,
   ): Promise<void> => {
     try {
-      await createOrUpdateSubscribe(idUser, idUserSubscription);
+      await createOrUpdateSubscribe(userId, userIdSubscription);
       res.status(201).send();
     } catch (error) {
       logger.error(error);
@@ -20,15 +20,15 @@ class SubscriptionController {
   };
 
   unsubscribe = async (
-    { body: { idUser, idUserSubscription } }: express.Request,
+    { body: { userId, userIdSubscription } }: express.Request,
     res: express.Response,
   ): Promise<void> => {
     try {
-      if (!checkId(idUserSubscription)) {
+      if (!checkId(userIdSubscription)) {
         res.status(400).send(t('message.badId'));
         return;
       }
-      await deleteSubscribe(idUser, idUserSubscription);
+      await deleteSubscribe(userId, userIdSubscription);
       res.status(200).send();
     } catch (error) {
       logger.error(error);
@@ -36,9 +36,9 @@ class SubscriptionController {
     }
   };
 
-  getSubscribe = async ({ body: { idUser } }: express.Request, res: express.Response): Promise<void> => {
+  getSubscribe = async ({ body: { userId } }: express.Request, res: express.Response): Promise<void> => {
     try {
-      const subscibes = await findSubscribes(idUser);
+      const subscibes = await findSubscribes(userId);
       res.status(200).json({
         data: subscibes.map((value: UserSubscriptionInterface) => ({
           phoneNumber: value.idUserSubscription.phoneNumber,

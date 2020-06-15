@@ -1,7 +1,7 @@
-import Phone from './phone';
+import Registration from './registration';
 import Profile from './profile';
 import Post from './post';
 import Token from './token';
 import Subscription from './subscription';
 
-export default { Phone, Profile, Post, Token, Subscription };
+export default { Registration, Profile, Post, Token, Subscription };
