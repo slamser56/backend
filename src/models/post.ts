@@ -1,10 +1,13 @@
 import mongoose, { Schema } from 'mongoose';
 import constantModels from './constantModels';
+import { PostTextInterface } from './postText';
 
 export interface PostInterface extends mongoose.Document {
   userId: string;
-  text: string;
+  postTextId: string | PostTextInterface;
   deleted: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const post = new Schema(

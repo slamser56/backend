@@ -3,15 +3,8 @@ import constantModels from './constantModels';
 
 export interface SubscriptionInterface extends mongoose.Document {
   userId: string;
-  userIdSubscription: string | {};
+  userIdSubscription: string;
   deleted: boolean;
-}
-
-export interface UserSubscriptionInterface extends SubscriptionInterface {
-  userIdSubscription: {
-    id: string;
-    phoneNumber: number;
-  };
 }
 
 const post = new Schema(
