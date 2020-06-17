@@ -1,29 +1,32 @@
-import mongoose from 'mongoose';
 import model from '../models';
-import { PostInterface } from '../models/post';
+import { PostInterface, AuthorInterface, ContentInterface } from '../models/post';
 import t from '../lang/index';
 
+interface FindPostInterface {
+  phoneNumber: number;
+  text: string;
+  createdAt: Date;
+}
+
 export const createPost = async (userId: string, text: string): Promise<PostInterface> => {
-  const { _id } = await model.postText.create({ text });
-  const create = await model.post.create({ userId, postTextId: _id });
+  const { _id } = await model.postContent.create({ text });
+  const create = await model.post.create({ author: userId, content: _id });
   return create;
 };
 
-export const findPosts = async (userId: string): Promise<PostInterface[]> => {
-  const find = await model.post.aggregate([
-    { $match: { userId: mongoose.Types.ObjectId(userId) } },
-    { $lookup: { from: 'posttexts', localField: 'postTextId', foreignField: '_id', as: 'text' } },
-    { $lookup: { from: 'users', localField: 'userId', foreignField: '_id', as: 'user' } },
-    { $unwind: '$text' },
-    { $unwind: '$user' },
-    { $project: { createdAt: 1, _id: 1, phoneNumber: '$user.phoneNumber', text: '$text.text' } },
-  ]);
-  if (find.length === 0) {
+export const findPosts = async (userId: string): Promise<FindPostInterface[]> => {
+  const find = await model.post.find({ isDeleted: false, author: userId }).populate('author').populate('content');
+  if (find?.length === 0) {
     return Promise.reject({ status: 404, message: t('message.postsNotFound') });
   }
-  return find;
+  const posts = find.map((post: AuthorInterface & ContentInterface) => ({
+    phoneNumber: post.author.phoneNumber,
+    text: post.content.text,
+    createdAt: post.createdAt,
+  }));
+  return posts;
 };
 
-export const deletePost = async (userId: string, _id: string): Promise<void> => {
-  await model.post.updateOne({ userId, _id }, { deleted: true });
+export const deletePost = async (userId: string, postId: string): Promise<void> => {
+  await model.post.updateOne({ author: userId, _id: postId }, { isDeleted: true, deletedAt: new Date() });
 };

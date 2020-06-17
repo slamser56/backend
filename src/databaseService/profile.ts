@@ -6,6 +6,6 @@ export const updateAvatar = async (avatar: string, userId: string): Promise<void
 };
 
 export const findUser = async (userId: string): Promise<UserInterface> => {
-  const find = await model.user.findById(userId).select({ avatar: 1, phoneNumber: 1 });
+  const find = await model.user.findById(userId).select({ avatar: 1, phoneNumber: 1, isDeleted: 1 });
   return find;
 };

@@ -6,9 +6,7 @@ import t from '../lang/index';
 class PostController {
   uploadPost = async ({ body: { userId, text } }: express.Request, res: express.Response): Promise<void> => {
     try {
-      if (!text) {
-        throw { status: 400, message: t('message.pleaseInputText') };
-      }
+      if (!text) throw { status: 400, message: t('message.pleaseInputText') };
       const post = await createPost(userId, text);
       res.status(201).send(post);
     } catch (error) {
@@ -27,9 +25,9 @@ class PostController {
     }
   };
 
-  deletePost = async ({ body: { userId, idPost } }: express.Request, res: express.Response): Promise<void> => {
+  deletePost = async ({ body: { userId, postId } }: express.Request, res: express.Response): Promise<void> => {
     try {
-      await deletePost(userId, idPost);
+      await deletePost(userId, postId);
       res.status(200).send();
     } catch (error) {
       logger.error(error);

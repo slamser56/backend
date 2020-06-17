@@ -1,19 +1,11 @@
-import t from '../lang/index';
-
-export function validatePhoneNumber(phoneNumber: string): void {
-  if (!/^(\+?\d{12})/.exec(phoneNumber)) {
-    throw { status: 400, message: t('message.inputCorrectPhoneNumber') };
-  }
+export function validatePhoneNumber(phoneNumber: string): boolean {
+  return !!/^(\+?\d{12})/.exec(phoneNumber);
 }
 
-export function validateId(id: string): void {
-  if (!(id?.length === 24)) {
-    throw { status: 400, message: t('message.badId') };
-  }
+export function validateId(id: string): boolean {
+  return id?.length === 24;
 }
 
-export function validatePassword(password: string): void {
-  if (!(password?.length >= 3 && password?.length <= 16)) {
-    throw { status: 400, message: t('message.inputCorrectPassword') };
-  }
+export function validatePassword(password: string): boolean {
+  return password?.length >= 3 && password?.length <= 16;
 }

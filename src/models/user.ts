@@ -5,7 +5,10 @@ export interface UserInterface extends mongoose.Document {
   avatar: string;
   phoneNumber: number;
   password: string;
-  deleted: boolean;
+  isDeleted: boolean;
+  deletedAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const user = new Schema(
@@ -22,9 +25,13 @@ const user = new Schema(
     avatar: {
       type: String,
     },
-    deleted: {
+    isDeleted: {
       type: Boolean,
       default: false,
+    },
+    deletedAt: {
+      type: Date,
+      default: null,
     },
   },
   {

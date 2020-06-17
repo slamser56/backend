@@ -11,6 +11,7 @@
     "thisPhoneNumberIsRegistered": "This phone number is registered",
     "inputCorrectPassword":"Input correct password",
     "passwordNotVerified":"Password not verified",
-    "inputCorrectUserOrPassword":"Input correct user or password"
+    "inputCorrectUserOrPassword":"Input correct user name or password",
+    "userIsDelete":"Пользователь удален"
   }
 }

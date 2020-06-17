@@ -1,30 +1,48 @@
 import mongoose, { Schema } from 'mongoose';
 import constantModels from './constantModels';
-import { PostTextInterface } from './postText';
 
 export interface PostInterface extends mongoose.Document {
-  userId: string;
-  postTextId: string | PostTextInterface;
-  deleted: boolean;
-  createdAt: string;
-  updatedAt: string;
+  author: string | {};
+  content: string | {};
+  isDeleted: boolean;
+  deletedAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface AuthorInterface extends PostInterface {
+  author: {
+    isDeleted: boolean;
+    phoneNumber: number;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+}
+export interface ContentInterface extends PostInterface {
+  content: {
+    text: string;
+  };
 }
 
 const post = new Schema(
   {
-    userId: {
+    author: {
       type: Schema.Types.ObjectId,
       ref: 'user',
       required: true,
     },
-    postTextId: {
+    content: {
       type: Schema.Types.ObjectId,
-      ref: 'postText',
+      ref: 'postContent',
       required: true,
     },
-    deleted: {
+    isDeleted: {
       type: Boolean,
       default: false,
+    },
+    deletedAt: {
+      type: Date,
+      default: null,
     },
   },
   {

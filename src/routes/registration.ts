@@ -8,7 +8,7 @@ const tokenController = new controller.Token();
 
 router.post(constantRoutes.SEND_CODE, registrationController.sendCode);
 router.post(constantRoutes.VERIFY_CODE, registrationController.verifyCode);
-router.post(constantRoutes.LOG_IN, registrationController.logIn);
-router.post(constantRoutes.VERIFY_TOKEN, tokenController.verifyToken);
+router.get(constantRoutes.LOG_IN, registrationController.logIn);
+router.get(constantRoutes.VERIFY_TOKEN, tokenController.verifyToken);
 
 export default router;

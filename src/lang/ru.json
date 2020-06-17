@@ -7,6 +7,10 @@
     "codeNotVerified": "Код не проверен",
     "postsNotFound": "Посты не найдены",
     "subscribeNotFound": "Подписка не найдена",
-    "badId": "Плохой ИД"
+    "badId": "Плохой ИД",
+    "thisPhoneNumberIsRegistered": "Этот номер телефона зарегестрирован",
+    "inputCorrectPassword":"Введите корректный пароль",
+    "passwordNotVerified":"Пароль не проверен",
+    "inputCorrectUserOrPassword":"Введите правильное имя или пароль"
   }
 }

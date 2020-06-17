@@ -16,6 +16,11 @@ const phoneVerification = new Schema({
     type: Number,
     required: true,
   },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+    index: { expires: 180 },
+  },
 });
 
 phoneVerification.set('toJSON', {

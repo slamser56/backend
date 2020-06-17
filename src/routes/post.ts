@@ -5,8 +5,8 @@ import constantRoutes from './constantRoutes';
 const router = express.Router();
 const postController = new controller.Post();
 
-router.post(constantRoutes.UPLOAD_POST, postController.uploadPost);
-router.post(constantRoutes.GET_POSTS, postController.getPosts);
-router.post(constantRoutes.DELETE_POST, postController.deletePost);
+router.post(constantRoutes.ROOT, postController.uploadPost);
+router.get(constantRoutes.ROOT, postController.getPosts);
+router.delete(constantRoutes.ROOT, postController.deletePost);
 
 export default router;

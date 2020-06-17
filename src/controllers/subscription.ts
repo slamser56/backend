@@ -5,13 +5,10 @@ import t from '../lang/index';
 import { validateId } from '../utils/validations';
 
 class SubscriptionController {
-  subscribe = async (
-    { body: { userId, userIdSubscription } }: express.Request,
-    res: express.Response,
-  ): Promise<void> => {
+  subscribe = async ({ body: { userId, anotherUserId } }: express.Request, res: express.Response): Promise<void> => {
     try {
-      validateId(userIdSubscription);
-      await createOrUpdateSubscribe(userId, userIdSubscription);
+      if (!validateId(anotherUserId)) throw { status: 400, message: t('message.badId') };
+      await createOrUpdateSubscribe(userId, anotherUserId);
       res.status(201).send();
     } catch (error) {
       logger.error(error);
@@ -20,12 +17,12 @@ class SubscriptionController {
   };
 
   unsubscribe = async (
-    { body: { userId, userIdSubscription } }: express.Request,
+    { body: { userId, anotherUserId } }: express.Request,
     res: express.Response,
   ): Promise<void> => {
     try {
-      validateId(userIdSubscription);
-      await deleteSubscribe(userId, userIdSubscription);
+      validateId(anotherUserId);
+      await deleteSubscribe(userId, anotherUserId);
       res.status(200).send();
     } catch (error) {
       logger.error(error);

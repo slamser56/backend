@@ -5,7 +5,7 @@ import constantRoutes from './constantRoutes';
 const router = express.Router();
 const profileController = new controller.Profile();
 
-router.post(constantRoutes.UPLOAD_AVATAR, profileController.uploadAvatar);
-router.post(constantRoutes.GET_PROFILE, profileController.getProfile);
+router.put(constantRoutes.AVATAR, profileController.uploadAvatar);
+router.get(constantRoutes.ROOT, profileController.getProfile);
 
 export default router;

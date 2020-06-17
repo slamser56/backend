@@ -5,15 +5,15 @@ export interface PostTextInterface extends mongoose.Document {
   text: string;
 }
 
-const postText = new Schema({
+const postContent = new Schema({
   text: {
     type: String,
     required: true,
   },
 });
 
-postText.set('toJSON', {
+postContent.set('toJSON', {
   virtuals: true,
 });
 
-export default mongoose.model<PostTextInterface>(constantModels.POST_TEXT, postText);
+export default mongoose.model<PostTextInterface>(constantModels.POST_CONTENT, postContent);

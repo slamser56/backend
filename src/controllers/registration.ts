@@ -13,11 +13,9 @@ import t from '../lang/index';
 class RegistrationController {
   sendCode = async ({ body: { phoneNumber } }: express.Request, res: express.Response): Promise<void> => {
     try {
-      validatePhoneNumber(phoneNumber);
+      if (!validatePhoneNumber(phoneNumber)) throw { status: 400, message: t('message.inputCorrectPhoneNumber') };
       const phone = await findPhoneNumber(phoneNumber);
-      if (phone) {
-        throw { status: 400, message: t('message.thisPhoneNumberIsRegistered') };
-      }
+      if (phone) throw { status: 400, message: t('message.thisPhoneNumberIsRegistered') };
       const code = getGeneratedCode();
       await createOrUpdateCode(phoneNumber, code);
       sendSmsMessage(phoneNumber, code);
@@ -33,7 +31,7 @@ class RegistrationController {
     res: express.Response,
   ): Promise<void> => {
     try {
-      validatePassword(password);
+      if (!validatePassword(password)) throw { status: 400, message: t('message.inputCorrectPassword') };
       await findCode(phoneNumber, code);
       await deleteCode(phoneNumber, code);
       const encryptedPassword = await encryptPassword(password);
@@ -49,6 +47,7 @@ class RegistrationController {
   logIn = async ({ body: { phoneNumber, password } }: express.Request, res: express.Response): Promise<void> => {
     try {
       const user = await findPhoneNumber(phoneNumber);
+      if(user.isDeleted) throw { status: 403, message: t('message.userIsDelete') };
       await checkPassword(password, user?.password);
       const token = sign({ exp: getExpiredTime(), phoneNumber, userId: user._id }, process.env.SECRET);
       res.status(200).json({ token });
