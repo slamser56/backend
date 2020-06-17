@@ -16,12 +16,9 @@ class SubscriptionController {
     }
   };
 
-  unsubscribe = async (
-    { body: { userId, anotherUserId } }: express.Request,
-    res: express.Response,
-  ): Promise<void> => {
+  unsubscribe = async ({ body: { userId, anotherUserId } }: express.Request, res: express.Response): Promise<void> => {
     try {
-      validateId(anotherUserId);
+      if (!validateId(anotherUserId)) throw { status: 400, message: t('message.badId') };
       await deleteSubscribe(userId, anotherUserId);
       res.status(200).send();
     } catch (error) {

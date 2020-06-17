@@ -47,7 +47,7 @@ class RegistrationController {
   logIn = async ({ body: { phoneNumber, password } }: express.Request, res: express.Response): Promise<void> => {
     try {
       const user = await findPhoneNumber(phoneNumber);
-      if(user.isDeleted) throw { status: 403, message: t('message.userIsDelete') };
+      if(user?.isDeleted) throw { status: 403, message: t('message.userIsDelete') };
       await checkPassword(password, user?.password);
       const token = sign({ exp: getExpiredTime(), phoneNumber, userId: user._id }, process.env.SECRET);
       res.status(200).json({ token });
