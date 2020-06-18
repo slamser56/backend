@@ -11,13 +11,8 @@ export const createOrUpdateCode = async (phoneNumber: number, code: number): Pro
 };
 
 export const findCode = async (phoneNumber: number, code: number): Promise<PhoneVerificationInterface> => {
-  const find = await model.phoneVerification.findOne({
-    phoneNumber,
-    code,
-  });
-  if (!find) {
-    return Promise.reject({ status: 404, message: t('message.codeNotVerified') });
-  }
+  const find = await model.phoneVerification.findOne({ phoneNumber, code });
+  if (!find) return Promise.reject({ status: 404, message: t('message.codeNotVerified') });
   return find;
 };
 

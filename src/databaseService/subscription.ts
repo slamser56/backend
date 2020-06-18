@@ -26,9 +26,7 @@ export const deleteSubscribe = async (subscriberId: string, userId: string): Pro
 
 export const findSubscribes = async (userId: string): Promise<FindSubscribesInterface[]> => {
   const find = await model.subscription.find({ subscriber: userId, isDeleted: false }).populate('user');
-  if (find.length === 0) {
-    return Promise.reject({ status: 404, message: t('message.subscribeNotFound') });
-  }
+  if (find.length === 0) return Promise.reject({ status: 404, message: t('message.subscribeNotFound') });
   const subscibes = find.map((subscription: UserInterface) => ({
     phoneNumber: subscription.user.phoneNumber,
     isDeleted: subscription.user.isDeleted,
