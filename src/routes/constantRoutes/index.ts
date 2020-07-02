@@ -10,6 +10,7 @@ enum constantRoutes {
   VERIFY_TOKEN = '/verifyToken',
   AVATAR = '/avatar',
   SUBSCRIPTION = '/subscription',
+  USERS = '/users',
 }
 
 export default constantRoutes;
