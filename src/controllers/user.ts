@@ -4,9 +4,9 @@ import { findUsers } from '../databaseService/user';
 import t from '../lang/index';
 
 class UserController {
-  getUsers = async ({ body: { phoneNumber } }: express.Request, res: express.Response): Promise<void> => {
+  getUsers = async ({ query: { phoneNumber } }: express.Request, res: express.Response): Promise<void> => {
     try {
-      const users = await findUsers(phoneNumber);
+      const users = await findUsers(Number(phoneNumber));
       res.status(200).json(users);
     } catch (error) {
       logger.error(error);

@@ -18,6 +18,7 @@ export const findPosts = async (userId: string): Promise<FindPostInterface[]> =>
   const find = await model.post.find({ isDeleted: false, author: userId }).populate('author').populate('content');
   if (find?.length === 0) return Promise.reject({ status: 404, message: t('message.postsNotFound') });
   const posts = find.map((post: AuthorInterface & ContentInterface) => ({
+    postId: post._id,
     phoneNumber: post.author.phoneNumber,
     text: post.content.text,
     createdAt: post.createdAt,

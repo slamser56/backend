@@ -31,6 +31,7 @@ export const findSubscribes = async (userId: string): Promise<FindSubscribesInte
     phoneNumber: subscription.user.phoneNumber,
     isDeleted: subscription.user.isDeleted,
     userId: subscription.user._id,
+    createdAt: subscription.user.createdAt,
   }));
   return subscibes;
 };
