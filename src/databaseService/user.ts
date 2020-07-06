@@ -13,7 +13,7 @@ export const findPhoneNumber = async (phoneNumber: number): Promise<UserInterfac
 
 export const findUsers = async (phoneNumber: number): Promise<UserInterface[]> => {
   const find = await model.user
-    .find({ phoneNumber: { $gte: phoneNumber }, isDeleted: false })
+    .find({ phoneNumber, isDeleted: false })
     .select({ phoneNumber: 1, createdAt: 1 });
   return find;
 };
