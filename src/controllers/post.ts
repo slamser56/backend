@@ -15,9 +15,9 @@ class PostController {
     }
   };
 
-  getPosts = async ({ body: { userId } }: express.Request, res: express.Response): Promise<void> => {
+  getPosts = async ({ body: { userId }, query }: express.Request, res: express.Response): Promise<void> => {
     try {
-      const posts = await findPosts(userId);
+      const posts = await findPosts(query?.user ?? userId);
       res.status(200).json(posts);
     } catch (error) {
       logger.error(error);
